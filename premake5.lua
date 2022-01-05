@@ -1,5 +1,5 @@
 workspace "Titan"
-    startproject "Editor"
+    startproject "TitanEditor"
     architecture "x64"
     configurations {"Debug", "Release", "Shipping"}
     flags {"MultiProcessorCompile"}
@@ -30,59 +30,38 @@ filter "configurations:Shipping"
     optimize "speed"
     
 --Output Directory Path
-binDir = "build/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
-objDir = "build/obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
+binDir = "../Build/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
+objDir = "../Build/obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
     
---Include directories
+--Include Directories
 IncludeDir = {}
 
+--Source Files Path
+h   = "source/**.h"
+hpp = "source/**.hpp"
+cpp = "source/**.cpp"
+
+--Include header files only path
+TitanEngineInc = "../TitanEngine/source"
+
 --Projects
+include "TitanEngine"
+include "TitanEditor"
 
---Engine
-project "Engine"
-    location "%{prj.name}"
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    warnings "Extra"
-
-    targetdir (binDir)
-    objdir (objDir)
-
-    files {
-        "%{prj.name}/include/**.h",
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
-
-    includedirs {
-        "%{prj.name}/include"
-    }
-
---Editor
-project "Editor"
-    location "%{prj.name}"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    warnings "Extra"
-    links {"Engine"}
-
-    targetdir (binDir)
-    objdir (objDir)
-
-    files {
-        "%{prj.name}/include/**.h",
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
-
-    includedirs {
-        "%{prj.name}/include",
-        "Engine/include"
-    }
+newaction {
+    trigger = "clean",
+    description = "Remove all vs and build files",
+    execute = function()
+        print("Deleting all vs and build files!")
+        os.rmdir("./Build")
+        os.rmdir("./.vs")
+        os.remove("**.sln")
+        os.remove("**.vcxproj")
+        os.remove("**.filters")
+        os.remove("**.user")
+        print("Finished!")
+    end
+}
 
 
     
