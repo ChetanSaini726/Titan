@@ -59,18 +59,18 @@ if not defined DenEnvDir (
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
 )
 
-REM Set directory to Project directory
-cd TitanEditor
-
-set proj="TitanEditor.vcxproj"
-
 set /p cfgrun= "Enter the build configuration (Debug/Release/Shipping): "
 
-if not exist .\Build\bin\%cfgrun%-windows-x64\TitanEditor\TitanEditor.exe (
+if not exist .\Build\bin\%cfgrun%-windows-x86_64\TitanEditor\TitanEditor.exe (
     echo "TitanEditor.exe not compiled for %cfgrun% configuration. Please compile first for desired configuration."
 
     goto arguments
 ) else continue
+
+REM Set directory to Project directory
+cd TitanEditor
+
+set proj="TitanEditor.vcxproj"
 
 REM Running MSBuild with 'Run' command
 MSBuild %proj% -t:"Run" -p:Configuration="%cfgrun%" -p:Platform=x64

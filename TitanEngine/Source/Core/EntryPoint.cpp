@@ -1,5 +1,5 @@
 #include "Engine/EntryPoint.hpp"
-#include "TitanWindow.h"
+#include "TitanWindow.hpp"
 
 namespace Titan
 {
